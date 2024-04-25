@@ -28,6 +28,9 @@ def correlation_analysis(path):
     Raises:
         FileNotFoundError: If the specified file path does not exist.
 
+    Returns:
+        matplotlib.figure.Figure: Matplotlib figure object containing the plot.
+
     Example:
         correlation_analysis('data.csv')
     """
@@ -41,11 +44,14 @@ def correlation_analysis(path):
         # Calculate the correlation matrix
         correlation_matrix = data[columns].corr()
 
+        # Create a new figure
+        fig, ax = plt.subplots(figsize=(10, 8))
+
         # Plot the correlation matrix as a heatmap
-        plt.figure(figsize=(10, 8))
-        sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
-        plt.title('Correlation Matrix')
-        plt.show()
+        sns.heatmap(
+            correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", ax=ax)
+        ax.set_title('Correlation Matrix')
+        return fig
     else:
         raise FileNotFoundError("File not found")
 
