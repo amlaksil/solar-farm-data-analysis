@@ -22,6 +22,10 @@ def box_plot(path):
     Raises:
         FileNotFoundError: If the specified file path does not exist.
 
+    Returns:
+        matplotlib.figure.Figure: Matplotlib figure object containing
+    the box plot.
+
     Example:
         box_plot('data.csv')
     """
@@ -34,13 +38,16 @@ def box_plot(path):
     # Select the columns for box plots
     columns = ['GHI', 'DNI', 'DHI', 'Tamb', 'TModA', 'TModB']
 
+    # Create a new figure
+    fig, ax = plt.subplots(figsize=(14, 7))
+
     # Create box plots
-    plt.figure(figsize=(14, 7))
-    data[columns].boxplot()
-    plt.title('Box Plot of Solar Radiation and Temperature Data')
-    plt.ylabel('Value')
-    plt.xticks(rotation=45)
-    plt.show()
+    data[columns].boxplot(ax=ax)
+    ax.set_title('Box Plot of Solar Radiation and Temperature Data')
+    ax.set_ylabel('Value')
+    ax.tick_params(axis='x', rotation=45)
+
+    return fig
 
 
 if __name__ == '__main__':

@@ -23,6 +23,10 @@ def histograms(path):
     Raises:
         FileNotFoundError: If the specified file path does not exist.
 
+    Returns:
+        matplotlib.figure.Figure: Matplotlib figure object containing
+    the plots.
+
     Example:
         histograms('data.csv')
     """
@@ -31,40 +35,42 @@ def histograms(path):
     # Load the data
     data = pd.read_csv(path)
 
+    # Create a new figure
+    fig, axs = plt.subplots(2, 3, figsize=(18, 10))
+
     # Plot histograms for GHI, DNI, DHI, WS, and temperatures
-    plt.figure(figsize=(14, 7))
-    plt.subplot(2, 3, 1)
-    data['GHI'].hist(bins=30, color='skyblue')
-    plt.title('GHI Histogram')
-    plt.xlabel('GHI (W/m²)')
-    plt.ylabel('Frequency')
+    data['GHI'].hist(bins=30, color='skyblue', ax=axs[0, 0])
+    axs[0, 0].set_title('GHI Histogram')
+    axs[0, 0].set_xlabel('GHI (W/m²)')
+    axs[0, 0].set_ylabel('Frequency')
 
-    plt.subplot(2, 3, 2)
-    data['DNI'].hist(bins=30, color='salmon')
-    plt.title('DNI Histogram')
-    plt.xlabel('DNI (W/m²)')
-    plt.ylabel('Frequency')
+    data['DNI'].hist(bins=30, color='salmon', ax=axs[0, 1])
+    axs[0, 1].set_title('DNI Histogram')
+    axs[0, 1].set_xlabel('DNI (W/m²)')
+    axs[0, 1].set_ylabel('Frequency')
 
-    plt.subplot(2, 3, 3)
-    data['DHI'].hist(bins=30, color='lightgreen')
-    plt.title('DHI Histogram')
-    plt.xlabel('DHI (W/m²)')
-    plt.ylabel('Frequency')
+    data['DHI'].hist(bins=30, color='lightgreen', ax=axs[0, 2])
+    axs[0, 2].set_title('DHI Histogram')
+    axs[0, 2].set_xlabel('DHI (W/m²)')
+    axs[0, 2].set_ylabel('Frequency')
 
-    plt.subplot(2, 3, 4)
-    data['WS'].hist(bins=30, color='gold')
-    plt.title('Wind Speed Histogram')
-    plt.xlabel('Wind Speed (m/s)')
-    plt.ylabel('Frequency')
+    data['WS'].hist(bins=30, color='gold', ax=axs[1, 0])
+    axs[1, 0].set_title('Wind Speed Histogram')
+    axs[1, 0].set_xlabel('Wind Speed (m/s)')
+    axs[1, 0].set_ylabel('Frequency')
 
-    plt.subplot(2, 3, 5)
-    data['Tamb'].hist(bins=30, color='orange')
-    plt.title('Ambient Temperature Histogram')
-    plt.xlabel('Ambient Temperature (°C)')
-    plt.ylabel('Frequency')
+    data['Tamb'].hist(bins=30, color='orange', ax=axs[1, 1])
+    axs[1, 1].set_title('Ambient Temperature Histogram')
+    axs[1, 1].set_xlabel('Ambient Temperature (°C)')
+    axs[1, 1].set_ylabel('Frequency')
 
-    plt.tight_layout()
-    plt.show()
+    # Remove the empty subplot
+    fig.delaxes(axs[1, 2])
+
+    # Adjust layout
+    fig.tight_layout()
+
+    return fig
 
 
 if __name__ == '__main__':
