@@ -22,18 +22,21 @@ def calculate_statistical_measures(path):
     Raises:
         FileNotFoundError: If the specified file path does not exist.
 
+    Returns:
+        numeric statistics as a dictionary
+
     Example:
         calculate_statistical_measures('data.csv')
     """
     if os.path.exists(path):
         # Load the data
         data = pd.read_csv(path)
-        numeric_stats = data.describe()
-        print(numeric_stats)
+        numeric_stats = data.describe().to_dict()
+        return numeric_stats
     else:
         raise FileNotFoundError("File not found")
 
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        calculate_statistical_measures(sys.argv[1])
+        print(calculate_statistical_measures(sys.argv[1]))
