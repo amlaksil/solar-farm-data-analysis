@@ -28,6 +28,10 @@ def data_quality_check(path):
     Raises:
         FileNotFoundError: If the specified file path does not exist.
 
+    Returns:
+        pd.DataFrame: DataFrame containing the results of the data quality
+    check.
+
     Example:
         data_quality_check('data.csv')
     """
@@ -37,7 +41,6 @@ def data_quality_check(path):
 
         # Check for missing values
         missing_values = data.isnull().sum()
-        print(f"Missing values:\n{missing_values}")
 
         """
         Check for negative values in columns where only positive values
@@ -50,24 +53,20 @@ def data_quality_check(path):
             # Count negative values in the column
             negative_values[column] = data[data[column] < 0].shape[0]
 
-        if negative_values:
-            print(f"Negative values in columns where only positive values" +
-                  f"should exist:\n{negative_values}")
-
         # Check for incorrect entries in cleaning column
         cleaning_values = data['Cleaning'].unique()
-        print(f"Cleaning column values:\n{cleaning_values}")
 
-        # Check for outliers using box plots
-        plt.figure(figsize=(14, 7))
-        data[['GHI', 'DNI', 'DHI']].boxplot()
-        plt.title('Box Plot of GHI, DNI, and DHI')
-        plt.ylabel('Value')
-        plt.show()
+        # Create DataFrame to hold results
+        result_df = pd.DataFrame({
+            'Missing Values': missing_values,
+            'Negative Values': list(negative_values.values()),
+            'Cleaning Column Values': [", ".join(map(str, cleaning_values))]
+        }, index=list(negative_values.keys()))
+        return result_df
     else:
         raise FileNotFoundError("File not found")
 
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        data_quality_check(sys.argv[1])
+        print(data_quality_check(sys.argv[1]))
