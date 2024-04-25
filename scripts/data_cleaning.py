@@ -25,6 +25,9 @@ def data_cleaning(path):
     Raises:
         FileNotFoundError: If the specified file path does not exist.
 
+    Returns:
+        pd.DataFrame: The cleaned dataset.
+
     Example:
         data_cleaning('data.csv')
     """
@@ -32,7 +35,8 @@ def data_cleaning(path):
         raise FileNotFoundError
 
     # Load the data
-    data = pd.read_csv(path)
+    data = pd.read_csv(
+        path, parse_dates=['Timestamp'], date_format='%Y-%m-%d %H:%M')
 
     # Drop columns with entirely null values
     data.dropna(axis=1, how='all', inplace=True)
@@ -44,8 +48,7 @@ def data_cleaning(path):
     # (example: removing negative values from GHI, DNI, DHI)
     data = data[(data['GHI'] >= 0) & (data['DNI'] >= 0) & (data['DHI'] >= 0)]
 
-    # Display the cleaned dataset
-    print(data.head())
+    return data
 
 
 if __name__ == '__main__':
