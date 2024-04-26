@@ -22,39 +22,44 @@ def wind_analysis(path):
     Raises:
         FileNotFoundError: If the specified file path does not exist.
 
+    Returns:
+        tuple: A tuple containing Matplotlib figure objects for wind speed
+    and wind direction analysis.
+
     Example:
         wind_analysis('data.csv')
     """
-    if os.path.exists(path):
-        # Load the data
-        data = pd.read_csv(path)
-
-        # Convert 'Timestamp' column to datetime format
-        data['Timestamp'] = pd.to_datetime(data['Timestamp'])
-
-        # Plot wind speed and wind direction over time
-        plt.figure(figsize=(14, 7))
-        plt.plot(data['Timestamp'], data['WS'], label='Wind Speed')
-        plt.plot(data['Timestamp'], data['WSgust'], label='Wind Gust Speed')
-        plt.plot(
-            data['Timestamp'], data['WSstdev'], label='Wind Speed Std Dev')
-        plt.xlabel('Timestamp')
-        plt.ylabel('Value')
-        plt.title('Wind Speed Analysis')
-        plt.legend()
-        plt.show()
-
-        plt.figure(figsize=(14, 7))
-        plt.plot(data['Timestamp'], data['WD'], label='Wind Direction')
-        plt.plot(
-            data['Timestamp'], data['WDstdev'], label='Wind Direction Std Dev')
-        plt.xlabel('Timestamp')
-        plt.ylabel('Value')
-        plt.title('Wind Direction Analysis')
-        plt.legend()
-        plt.show()
-    else:
+    if not os.path.exists(path):
         raise FileNotFoundError("File not found")
+
+    # Load the data
+    data = pd.read_csv(path)
+
+    # Convert 'Timestamp' column to datetime format
+    data['Timestamp'] = pd.to_datetime(data['Timestamp'])
+
+    # Create figures
+    fig_ws, ax_ws = plt.subplots(figsize=(14, 7))
+    fig_wd, ax_wd = plt.subplots(figsize=(14, 7))
+
+    # Plot wind speed and wind direction over time
+    ax_ws.plot(data['Timestamp'], data['WS'], label='Wind Speed')
+    ax_ws.plot(data['Timestamp'], data['WSgust'], label='Wind Gust Speed')
+    ax_ws.plot(data['Timestamp'], data['WSstdev'], label='Wind Speed Std Dev')
+    ax_ws.set_xlabel('Timestamp')
+    ax_ws.set_ylabel('Value')
+    ax_ws.set_title('Wind Speed Analysis')
+    ax_ws.legend()
+
+    ax_wd.plot(data['Timestamp'], data['WD'], label='Wind Direction')
+    ax_wd.plot(
+        data['Timestamp'], data['WDstdev'], label='Wind Direction Std Dev')
+    ax_wd.set_xlabel('Timestamp')
+    ax_wd.set_ylabel('Value')
+    ax_wd.set_title('Wind Direction Analysis')
+    ax_wd.legend()
+
+    return fig_ws, fig_wd
 
 
 if __name__ == '__main__':

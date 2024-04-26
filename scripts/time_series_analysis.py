@@ -25,6 +25,9 @@ def time_series_analysis(path):
     Raises:
         FileNotFoundError: If the specified file path does not exist.
 
+    Returns:
+        matplotlib.figure.Figure: Matplotlib figure object containing the plot.
+
     Example:
         time_series_analysis('data.csv')
     """
@@ -38,17 +41,23 @@ def time_series_analysis(path):
     data['Timestamp'] = pd.to_datetime(data['Timestamp'])
     data.set_index('Timestamp', inplace=True)
 
-    # Plot GHI, DNI, DHI, and Tamb over time
-    plt.figure(figsize=(14, 7))
-    plt.plot(data['GHI'], label='GHI')
-    plt.plot(data['DNI'], label='DNI')
-    plt.plot(data['DHI'], label='DHI')
-    plt.plot(data['Tamb'], label='Tamb')
-    plt.xlabel('Timestamp')
-    plt.ylabel('Value')
-    plt.title('Solar Farm Variables Over Time')
-    plt.legend()
-    plt.show()
+    # Create a new figure
+    fig, ax = plt.subplots(figsize=(14, 7))
+
+    ax.plot(data.index, data['GHI'], label='GHI')
+    ax.plot(data.index, data['DNI'], label='DNI')
+    ax.plot(data.index, data['DHI'], label='DHI')
+    ax.plot(data.index, data['Tamb'], label='Tamb')
+
+    # Set labels and title
+    ax.set_xlabel('Timestamp')
+    ax.set_ylabel('Value')
+    ax.set_title('Solar Farm Variables Over Time')
+
+    # Add legend
+    ax.legend()
+
+    return fig
 
 
 if __name__ == '__main__':

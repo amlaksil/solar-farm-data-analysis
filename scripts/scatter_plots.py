@@ -23,6 +23,10 @@ def scatter_plots(path):
     Raises:
         FileNotFoundError: If the specified file path does not exist.
 
+    Returns:
+        matplotlib.figure.Figure: Matplotlib figure object containing the
+    scatter plots.
+
     Example:
         scatter_plots('data.csv')
     """
@@ -33,38 +37,36 @@ def scatter_plots(path):
     data = pd.read_csv(path)
 
     # Create scatter plots
-    plt.figure(figsize=(14, 7))
+    fig, axs = plt.subplots(2, 2, figsize=(14, 7))
 
     # GHI vs. Tamb
-    plt.subplot(2, 2, 1)
-    plt.scatter(data['GHI'], data['Tamb'])
-    plt.title('GHI vs. Tamb')
-    plt.xlabel('GHI (W/m²)')
-    plt.ylabel('Tamb (°C)')
+    axs[0, 0].scatter(data['GHI'], data['Tamb'])
+    axs[0, 0].set_title('GHI vs. Tamb')
+    axs[0, 0].set_xlabel('GHI (W/m²)')
+    axs[0, 0].set_ylabel('Tamb (°C)')
 
     # WS vs. WSgust
-    plt.subplot(2, 2, 2)
-    plt.scatter(data['WS'], data['WSgust'])
-    plt.title('WS vs. WSgust')
-    plt.xlabel('WS (m/s)')
-    plt.ylabel('WSgust (m/s)')
+    axs[0, 1].scatter(data['WS'], data['WSgust'])
+    axs[0, 1].set_title('WS vs. WSgust')
+    axs[0, 1].set_xlabel('WS (m/s)')
+    axs[0, 1].set_ylabel('WSgust (m/s)')
 
     # DNI vs. DHI
-    plt.subplot(2, 2, 3)
-    plt.scatter(data['DNI'], data['DHI'])
-    plt.title('DNI vs. DHI')
-    plt.xlabel('DNI (W/m²)')
-    plt.ylabel('DHI (W/m²)')
+    axs[1, 0].scatter(data['DNI'], data['DHI'])
+    axs[1, 0].set_title('DNI vs. DHI')
+    axs[1, 0].set_xlabel('DNI (W/m²)')
+    axs[1, 0].set_ylabel('DHI (W/m²)')
 
     # TModA vs. TModB
-    plt.subplot(2, 2, 4)
-    plt.scatter(data['TModA'], data['TModB'])
-    plt.title('TModA vs. TModB')
-    plt.xlabel('TModA (°C)')
-    plt.ylabel('TModB (°C)')
+    axs[1, 1].scatter(data['TModA'], data['TModB'])
+    axs[1, 1].set_title('TModA vs. TModB')
+    axs[1, 1].set_xlabel('TModA (°C)')
+    axs[1, 1].set_ylabel('TModB (°C)')
 
+    # Adjust layout
     plt.tight_layout()
-    plt.show()
+
+    return fig
 
 
 if __name__ == '__main__':

@@ -23,30 +23,34 @@ def temperature_analysis(path):
     Raises:
         FileNotFoundError: If the specified file path does not exist.
 
+    Returns:
+        matplotlib.figure.Figure: Matplotlib figure object containing the plot.
+
     Example:
         temperature_analysis('data.csv')
     """
-    if os.path.exists(path):
-        # Load the data
-        data = pd.read_csv(path)
-
-        # Convert 'Timestamp' column to datetime format
-        data['Timestamp'] = pd.to_datetime(data['Timestamp'])
-
-        # Plot module temperatures and ambient temperature over time
-        plt.figure(figsize=(14, 7))
-        plt.plot(
-            data['Timestamp'], data['TModA'], label='Module Temperature A')
-        plt.plot(
-            data['Timestamp'], data['TModB'], label='Module Temperature B')
-        plt.plot(data['Timestamp'], data['Tamb'], label='Ambient Temperature')
-        plt.xlabel('Timestamp')
-        plt.ylabel('Temperature (°C)')
-        plt.title('Temperature Analysis')
-        plt.legend()
-        plt.show()
-    else:
+    if not os.path.exists(path):
         raise FileNotFoundError("File not found")
+
+    # Load the data
+    data = pd.read_csv(path)
+
+    # Convert 'Timestamp' column to datetime format
+    data['Timestamp'] = pd.to_datetime(data['Timestamp'])
+
+    # Create a new figure
+    fig, ax = plt.subplots(figsize=(14, 7))
+
+    # Plot module temperatures and ambient temperature over time
+    ax.plot(data['Timestamp'], data['TModA'], label='Module Temperature A')
+    ax.plot(data['Timestamp'], data['TModB'], label='Module Temperature B')
+    ax.plot(data['Timestamp'], data['Tamb'], label='Ambient Temperature')
+    ax.set_xlabel('Timestamp')
+    ax.set_ylabel('Temperature (°C)')
+    ax.set_title('Temperature Analysis')
+    ax.legend()
+
+    return fig
 
 
 if __name__ == '__main__':
